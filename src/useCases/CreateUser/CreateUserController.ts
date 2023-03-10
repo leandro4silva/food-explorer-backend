@@ -1,27 +1,28 @@
 import { Request, Response } from "express";
-import { ZodError } from 'zod';
-import { userValidate } from "../../schemas/user.schema";
+import { CreateUserUseCase } from "./CreateUserUseCase";
 
 export class CreateUserController{
-    create(request: Request, response: Response){
-        try{
-            const data = userValidate.parse(request.body);
+    private createUserUseCase: CreateUserUseCase;
 
-            return response.status(200).json();
-        
-        }catch(error){
-            if(error instanceof ZodError){
-                return response.status(400).json(error.issues.map((issue) => ({ message: issue.message})))
-            }
-        }
+    constructor(createUserUseCase: CreateUserUseCase){
+        this.createUserUseCase = createUserUseCase;
     }
 
-    async index(request: Request, response: Response){
-        // try{
-        //     const users = await prisma.user.findMany();
-        //     response.json(users)
-        // }catch(error){
-        //     console.log(error);
-        // }
+    async handle(request: Request, response: Response): Promise<Response>{
+        const { name, email, password } = request.body;
+        
+        try{
+            await this.createUserUseCase.execute({
+                name,
+                email,
+                password
+            });
+
+            return response.status(201).send();
+        }catch(error){
+            return response.status(400).json({
+                message: 'Unexpected error.'
+            })
+        }
     }
 }
