@@ -1,17 +1,25 @@
 import { Request, Response } from "express";
+import { ZodError } from "zod";
 import { CreateUserUseCase } from "./CreateUserUseCase";
+import { createUserValidate } from "./CreateUserValidate";
 
-export class CreateUserController{
+export class CreateUserController {
     private createUserUseCase: CreateUserUseCase;
 
-    constructor(createUserUseCase: CreateUserUseCase){
+    constructor(createUserUseCase: CreateUserUseCase) {
         this.createUserUseCase = createUserUseCase;
     }
 
-    async handle(request: Request, response: Response): Promise<Response>{
+    async handle(request: Request, response: Response): Promise<Response> {
         const { name, email, password } = request.body;
-        
-        try{
+
+        try {
+            createUserValidate.parse({
+                name,
+                email,
+                password
+            });
+
             await this.createUserUseCase.execute({
                 name,
                 email,
@@ -19,10 +27,20 @@ export class CreateUserController{
             });
 
             return response.status(201).send();
-        }catch(error){
-            return response.status(400).json({
-                message: 'Unexpected error.'
-            })
+        } catch (error) {
+            if (error instanceof ZodError) {
+                return response.status(400).json(error.issues.map((issue) => (
+                    { message: issue.message }
+                )));
+            }
+            if(error instanceof Error){
+                return response.status(400).json({
+                    message: error.message
+                });
+            }
+            return response.status(500).json({
+                message: 'Erro inesperado ao criar usuário.'
+            });
         }
     }
 }

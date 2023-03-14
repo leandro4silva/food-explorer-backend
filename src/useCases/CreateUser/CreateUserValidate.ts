@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userValidate = z.object({
+export const createUserValidate = z.object({
     name: z.string({
         required_error: "O campo nome deve ser preenchido",
     }).nonempty("O nome deve ser preenchido"),
