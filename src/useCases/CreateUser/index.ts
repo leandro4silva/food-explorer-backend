@@ -5,9 +5,7 @@ import { CreateUserUseCase } from "./CreateUserUseCase";
 
 const mailtrapMailProvider = new MailtrapMailProvider();
 const mysqlUserRepository = new MysqlUserRepository();
-
 const createUserUseCase = new CreateUserUseCase(mysqlUserRepository, mailtrapMailProvider);
-
 const createUserController = new CreateUserController(createUserUseCase);
 
 export{
