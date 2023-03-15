@@ -7,15 +7,11 @@ export class MysqlUserRepository implements IUserRepository{
     private prisma = new PrismaClient();
 
     async findByEmail(email: string): Promise<User | null> {
-        
         const user = await this.prisma.user.findFirst({
             where: {
                 email
             }
         });
-
-        console.log(user)
-
         return user;
     }
 
@@ -34,7 +30,6 @@ export class MysqlUserRepository implements IUserRepository{
 
     async listAllUsers(): Promise<User[] | null> {
         const allUsers = await this.prisma.user.findMany();
-
         return allUsers;
     }
 }

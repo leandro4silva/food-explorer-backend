@@ -29,12 +29,12 @@ export class CreateUserController {
             return response.status(201).send();
         } catch (error) {
             if (error instanceof ZodError) {
-                return response.status(400).json(error.issues.map((issue) => (
+                return response.status(401).json(error.issues.map((issue) => (
                     { message: issue.message }
                 )));
             }
             if(error instanceof Error){
-                return response.status(400).json({
+                return response.status(401).json({
                     message: error.message
                 });
             }
