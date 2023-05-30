@@ -11,17 +11,19 @@ export class CreateSessionController{
     }
     
     async handle(request: Request, response: Response): Promise<Response>{
-        const {email, password} = request.body;
+        const {email, password, isAdmin} = request.body;
         
         try{
             createSessionValidate.parse({
                 email,
-                password
+                password,
+                isAdmin
             });
-
+            
             const userWithToken = await this.createSessionUseCase.execute({
                 email, 
-                password
+                password,
+                isAdmin
             });
             
             return response.status(201).json(userWithToken);

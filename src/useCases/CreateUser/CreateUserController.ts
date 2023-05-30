@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ZodError } from "zod";
 import { CreateUserUseCase } from "./CreateUserUseCase";
 import { createUserValidate } from "./CreateUserValidate";
+import { AppError } from "../../utils/AppErrpr";
 
 export class CreateUserController {
     private createUserUseCase: CreateUserUseCase;
@@ -14,17 +15,13 @@ export class CreateUserController {
         const { name, email, password } = request.body;
 
         try {
-            createUserValidate.parse({
+            const data = createUserValidate.parse({
                 name,
                 email,
                 password
             });
 
-            await this.createUserUseCase.execute({
-                name,
-                email,
-                password
-            });
+            await this.createUserUseCase.execute(data);
 
             return response.status(201).send();
         } catch (error) {
@@ -33,9 +30,10 @@ export class CreateUserController {
                     { message: issue.message }
                 )));
             }
-            if(error instanceof Error){
+            if(error instanceof AppError){
                 return response.status(401).json({
-                    message: error.message
+                    type: error.type,
+                    message: error.message,
                 });
             }
             return response.status(500).json({

@@ -20,3 +20,49 @@ model User {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 }
+
+model Admin {
+  id       String @id @default(cuid())
+  name     String
+  email    String @unique
+  password String
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Dish {
+  id          String @id @default(cuid())
+  image       String
+  name        String @unique
+  category    String @unique
+  price       String
+  description String
+
+  categoryId Category @relation(fields: [category], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  DishIngredients DishIngredients[]
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+  Dish Dish[]
+}
+
+model Ingredient {
+  id              String            @id @default(cuid())
+  name            String            @unique
+  DishIngredients DishIngredients[]
+}
+
+model DishIngredients {
+  id           String @id @default(cuid())
+  ingredientId String
+  dishId       String
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dish       Dish       @relation(fields: [dishId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

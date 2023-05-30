@@ -6,5 +6,8 @@ export const createSessionValidate = z.object({
     }).nonempty("O email deve ser preenchido").email("Insira um email valido"),
     password: z.string({
         required_error: "O campo senha deve ser preenchido"
-    }).nonempty("A senha deve ser preenchida")
+    }).nonempty("A senha deve ser preenchida"),
+    isAdmin: z.boolean({
+        required_error: "O campo tipo de login deve ser informado"
+    })
 })

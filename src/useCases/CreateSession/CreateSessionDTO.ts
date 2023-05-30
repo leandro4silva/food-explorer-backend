@@ -1,4 +1,5 @@
 export interface ICreateSessionRequestDTO{
     email: string,
-    password: string
+    password: string,
+    isAdmin: boolean
 }
