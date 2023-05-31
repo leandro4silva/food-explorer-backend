@@ -11,21 +11,25 @@ export class CreateDishUseCase{
     }
 
     async execute(data: ICreateDishRequestDTO){
-
         const { ingredients, name } = data;
 
-        await this.dishRepository.findDishByName(name);
+        const dishAlreadyExist = await this.dishRepository.findDishByName(name);
 
-        // ingredients.map(async (item) => {
-        //     const ingredient = await this.dishRepository.findIngredientsByName(item.name);
+        if (dishAlreadyExist) {
+            throw new AppError('Esse prato já está cadastrado.', 'dish');
+        }
 
-        //     if(ingredient){
-        //         throw new AppError(`O ingrediente ${ingredient.name} já está cadastrado.`, 'ingredients');
-        //     }
-        // })
+        const ingredientAlreadyExist = ingredients.filter((ingredient, index, self) => {
+            return index != self.findIndex((item) => {
+                return item.name == ingredient.name
+            }) ? ingredient.name : null
+        })
+        
+        if(ingredientAlreadyExist){
+            throw new AppError(`Existem dois ingredientes com o nome ${ingredientAlreadyExist[0].name}.`, 'ingredients');
+        }
 
-        // const dish = new Dish(data);
-
-        // this.dishRepository.save(dish);
+        const dish = new Dish(data);
+        this.dishRepository.save(dish);
     }
 }

@@ -41,7 +41,7 @@ export class MysqlDishRepository implements IDishRepository {
 
     }
 
-    async findIngredientsByName(name: string): Promise<IngredientProps | null> {
+    async findIngredientByName(name: string): Promise<IngredientProps | null> {
         const ingredient = await this.prisma.ingredient.findFirst({
             where: {
                 name
@@ -52,29 +52,46 @@ export class MysqlDishRepository implements IDishRepository {
     }
 
     async findDishByName(name: string): Promise<Dish | null> {
-        let data: Dish;
+        let ingredients = [];
 
-        const dish = await this.prisma.dish.findFirst({
+        const dishSelect = await this.prisma.dish.findFirst({
+            select:{
+                id: true,
+                image: true,
+                category: true,
+                description: true,
+                name: true,
+                price: true,
+                DishIngredients:{
+                    select:{
+                        ingredient: true,
+                    }
+                },
+            },
             where: {
                 name
             },
-            include:{
-                DishIngredients: true
-            }
         });
+        
+        if(dishSelect){
+            ingredients = dishSelect.DishIngredients.map((item) => {
+                return item.ingredient
+            });
 
-        if(dish){
-            dish.DishIngredients.map(async (item) => {
-                const ingredient = await this.prisma.ingredient.findFirstOrThrow({
-                    where :{
-                        id: item.ingredientId
-                    }
-                });
-            })
+            const dish = new Dish({
+                image: dishSelect.image,
+                name: dishSelect.name,
+                category: dishSelect.category,
+                description: dishSelect.description,
+                price: dishSelect.price,
+                ingredients
+            });
+
+            return dish;
         }
 
         return null;
     }
 
- 
+
 }
