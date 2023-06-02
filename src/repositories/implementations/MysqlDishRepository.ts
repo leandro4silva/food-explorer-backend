@@ -41,6 +41,48 @@ export class MysqlDishRepository implements IDishRepository {
 
     }
 
+    async findDishById(id: string): Promise<Dish | null> {
+        let ingredients = [];
+
+        const dishSelect = await this.prisma.dish.findFirst({
+            select:{
+                id: true,
+                image: true,
+                category: true,
+                description: true,
+                name: true,
+                price: true,
+                DishIngredients:{
+                    select:{
+                        ingredient: true,
+                    }
+                },
+            },
+            where:{
+                id
+            }
+        })
+
+        if(dishSelect){
+            ingredients = dishSelect.DishIngredients.map((item) => {
+                return item.ingredient
+            });
+
+            const dish = new Dish({
+                image: dishSelect.image,
+                name: dishSelect.name,
+                category: dishSelect.category,
+                description: dishSelect.description,
+                price: dishSelect.price,
+                ingredients
+            });
+
+            return dish;
+        }
+
+        return null
+    }
+
     async findIngredientByName(name: string): Promise<IngredientProps | null> {
         const ingredient = await this.prisma.ingredient.findFirst({
             where: {
