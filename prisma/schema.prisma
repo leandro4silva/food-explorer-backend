@@ -35,7 +35,7 @@ model Dish {
   id          String @id @default(cuid())
   image       String
   name        String @unique
-  category    String @unique
+  category    String
   price       String
   description String
 
@@ -54,7 +54,7 @@ model Category {
 
 model Ingredient {
   id              String            @id @default(cuid())
-  name            String            @unique
+  name            String
   DishIngredients DishIngredients[]
 }
 

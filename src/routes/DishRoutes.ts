@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, response } from 'express';
 import { createDishController } from '../useCases/CreateDish';
 import { uploadImageDishController } from '../useCases/UploadImageDish';
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
+import { listDishsCOntroller } from '../useCases/ListDishs';
 import multer from 'multer';
 import uploadConfig from '../configs/upload';
 
@@ -13,7 +13,13 @@ dishRouter.post('/', (request, response) => {
     return createDishController.handle(request, response);
 });
 
-dishRouter.patch('/image', ensureAuthenticated, upload.single('image') ,uploadImageDishController.handle)
+dishRouter.patch('/image/:name', upload.single('image'), (request, response) =>{
+    return uploadImageDishController.handle(request, response);
+})
+
+dishRouter.get('/', (request, response) => {
+    return listDishsCOntroller.handle(request, response);
+})
 
 export {
     dishRouter

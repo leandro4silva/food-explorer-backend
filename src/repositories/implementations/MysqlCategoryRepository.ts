@@ -6,6 +6,10 @@ export class MysqlCategoryRepository implements ICategoryRepository{
     private prisma = new PrismaClient();
 
     async listAllCategory(): Promise<Category[] | null> {
-        return await this.prisma.category.findMany();
+        return await this.prisma.category.findMany({
+            orderBy: {
+                id: "asc"
+            }
+        });
     }
 }

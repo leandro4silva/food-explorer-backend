@@ -1,9 +1,7 @@
 import {z} from 'zod';
 
 export const createDishValidate = z.object({
-    image: z.string({
-        required_error: "O campo Imagem deve ser preenchido"
-    }).nonempty("O campo Imagem deve ser preenchido"),
+    image: z.string(),
     name: z.string({
         required_error: "O campo Nome deve ser preenchido"
     }).nonempty("O campo Imagem deve ser preenchido"),

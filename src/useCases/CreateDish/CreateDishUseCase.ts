@@ -14,22 +14,23 @@ export class CreateDishUseCase{
         const { ingredients, name } = data;
 
         const dishAlreadyExist = await this.dishRepository.findDishByName(name);
-
+        
         if (dishAlreadyExist) {
             throw new AppError('Esse prato já está cadastrado.', 'dish');
         }
-
+        
         const ingredientAlreadyExist = ingredients.filter((ingredient, index, self) => {
             return index != self.findIndex((item) => {
                 return item.name == ingredient.name
             }) ? ingredient.name : null
         })
         
-        if(ingredientAlreadyExist){
+        if(ingredientAlreadyExist.length > 0){
             throw new AppError(`Existem dois ingredientes com o nome ${ingredientAlreadyExist[0].name}.`, 'ingredients');
         }
 
         const dish = new Dish(data);
-        this.dishRepository.save(dish);
+        
+        await this.dishRepository.save(dish);
     }
 }

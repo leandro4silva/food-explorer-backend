@@ -41,6 +41,8 @@ export class CreateDishController{
                 });
             }
 
+            console.log(error)
+
             return response.status(500).json({
                 message: 'Erro inesperado ao criar prato.'
             });
