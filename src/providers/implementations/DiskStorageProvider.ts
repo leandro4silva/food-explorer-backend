@@ -1,6 +1,6 @@
 import { IDiskStorageProvider } from "../IDiskStorageProviers";
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 import uploadConfig from '../../configs/upload';
 
 export class DiskStorage implements IDiskStorageProvider {

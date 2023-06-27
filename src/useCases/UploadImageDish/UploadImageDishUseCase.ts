@@ -14,15 +14,15 @@ export class UploadImageDishUseCase{
 
     async execute({name, image}: IUploadImageDishDTO){
         const dish = await this.dishRepository.findDishByName(name);
-
+        
         if(!dish){
             throw new AppError("Esse prato ainda não está cadastrado", '', 404);
         }
-
+        
         if(dish.image){
             await this.diskStorageProvider.deleteFile(dish.image);
         }
-
+        
         const filename = await this.diskStorageProvider.saveFile(image);
 
         await this.dishRepository.updateImage(filename, dish.id);

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiskStorage = void 0;
-const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const upload_1 = __importDefault(require("../../configs/upload"));
 class DiskStorage {
     async saveFile(fileName) {
