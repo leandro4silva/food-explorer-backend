@@ -17,8 +17,9 @@ model User {
   email    String @unique
   password String
 
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createAt  DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
+  Favorites Favorites[]
 }
 
 model Admin {
@@ -44,6 +45,7 @@ model Dish {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   DishIngredients DishIngredients[]
+  Favorites       Favorites[]
 }
 
 model Category {
@@ -58,11 +60,22 @@ model Ingredient {
   DishIngredients DishIngredients[]
 }
 
+model Favorites {
+  userId String
+  dishId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dish Dish @relation(fields: [dishId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userId, dishId])
+}
+
 model DishIngredients {
-  id           String @id @default(cuid())
   ingredientId String
   dishId       String
 
   ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   dish       Dish       @relation(fields: [dishId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([ingredientId, dishId])
 }

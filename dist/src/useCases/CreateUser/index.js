@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createUserController = exports.createUserUseCase = void 0;
+const MailtrapMailProvider_1 = require("../../providers/implementations/MailtrapMailProvider");
+const MysqlUserRepository_1 = require("../../repositories/implementations/MysqlUserRepository");
+const CreateUserController_1 = require("./CreateUserController");
+const CreateUserUseCase_1 = require("./CreateUserUseCase");
+const mailtrapMailProvider = new MailtrapMailProvider_1.MailtrapMailProvider();
+const mysqlUserRepository = new MysqlUserRepository_1.MysqlUserRepository();
+const createUserUseCase = new CreateUserUseCase_1.CreateUserUseCase(mysqlUserRepository, mailtrapMailProvider);
+exports.createUserUseCase = createUserUseCase;
+const createUserController = new CreateUserController_1.CreateUserController(createUserUseCase);
+exports.createUserController = createUserController;

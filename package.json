@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --exit-child ./src/server.ts"
+    "build": "tsc",
+    "dev": "tsnd --exit-child ./src/server.ts",
+    "start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -30,12 +32,13 @@
     "@prisma/client": "^4.11.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
+    "pm2": "^5.3.0",
     "zod": "^3.21.4"
   }
 }

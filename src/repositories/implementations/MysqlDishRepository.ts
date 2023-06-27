@@ -61,13 +61,31 @@ export class MysqlDishRepository implements IDishRepository {
             }
         })
 
-        dish.ingredients.map(async (ingredient) => {
-            await this.prisma.ingredient.update({
-                data: {
-                    id: ingredient.name
-                },
+        const ingredients =  await this.prisma.dishIngredients.findMany({
+            where: {
+                dishId: dish.id
+            }
+        });
+
+        ingredients.map(async (ingredient) => {
+            await this.prisma.ingredient.delete({
                 where: {
-                    id: ingredient.id
+                    id: ingredient.ingredientId
+                }
+            })
+        })
+
+        dish.ingredients.map(async (ingredient) => {
+            const ingredientCreate = await this.prisma.ingredient.create({
+                data: {
+                    name: ingredient.name
+                }
+            })
+
+            await this.prisma.dishIngredients.create({
+                data: {
+                    dishId: dish.id,
+                    ingredientId: ingredientCreate.id
                 }
             })
         })
@@ -86,6 +104,47 @@ export class MysqlDishRepository implements IDishRepository {
                         category: true,
                         price: true,
                         description: true,
+                    }
+                },
+                name: true,
+                id: true
+            },
+            orderBy: {
+                id: "asc"
+            }
+ 
+        });
+
+        
+        dishsWithCategory.map(item => {
+            listDishs.push({
+                id: item.id,
+                category: item.name,
+                dishs: item.Dish
+            })
+        })
+        
+        return listDishs;
+    }
+
+    async searchDish(dishName: string): Promise<IListDishsDTO[]>  {
+        let listDishs: Array<IListDishsDTO> = [];
+
+        const dishsWithCategory = await this.prisma.category.findMany({
+            select:{    
+                Dish: {
+                    select:{
+                        id: true,
+                        name: true,
+                        image: true,
+                        category: true,
+                        price: true,
+                        description: true,
+                    },
+                    where:{
+                        name: {
+                            contains: dishName
+                        }
                     }
                 },
                 name: true,
@@ -131,11 +190,13 @@ export class MysqlDishRepository implements IDishRepository {
             }
         })
 
+        
         if (dishSelect) {
             ingredients = dishSelect.DishIngredients.map((item) => {
                 return item.ingredient
             });
 
+            
             const dish = {
                 id: dishSelect.id,
                 image: dishSelect.image,
@@ -143,9 +204,9 @@ export class MysqlDishRepository implements IDishRepository {
                 category: dishSelect.category,
                 description: dishSelect.description,
                 price: dishSelect.price,
-                ingredients
+                ingredients: ingredients
             };
-
+            
             return dish;
         }
 

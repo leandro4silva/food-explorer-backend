@@ -8,9 +8,9 @@ export interface IDishRepository{
     save(data: Dish): Promise<void>
     updateImage(image: string, dishId: string): Promise<void>
     update(dish:Dish): Promise<void>
-    updateImage(id: string, image: string): Promise<void>
     findDishById(id: string): Promise<Dish | null> 
     findIngredientByName(name:string): Promise<IngredientProps | null>
     findDishByName(name:string): Promise<DishProps | null>
     findDishsByCategory(): Promise<IListDishsDTO[]>
+    searchDish(dishName: string): Promise<IListDishsDTO[]>
 }

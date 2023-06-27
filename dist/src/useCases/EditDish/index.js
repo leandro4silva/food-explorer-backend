@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.editDishUseCase = exports.editDishController = void 0;
+const MysqlDishRepository_1 = require("../../repositories/implementations/MysqlDishRepository");
+const EditDishUseCase_1 = require("./EditDishUseCase");
+const EditDishController_1 = require("./EditDishController");
+const mysqlDishRepository = new MysqlDishRepository_1.MysqlDishRepository();
+const editDishUseCase = new EditDishUseCase_1.EditDishUseCase(mysqlDishRepository);
+exports.editDishUseCase = editDishUseCase;
+const editDishController = new EditDishController_1.EditDishController(editDishUseCase);
+exports.editDishController = editDishController;

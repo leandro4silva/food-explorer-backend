@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listDishsUseCase = exports.listDishsController = void 0;
+const MysqlDishRepository_1 = require("../../repositories/implementations/MysqlDishRepository");
+const MysqlCategoryRepository_1 = require("../../repositories/implementations/MysqlCategoryRepository");
+const ListDishsController_1 = require("./ListDishsController");
+const ListDishsUseCase_1 = require("./ListDishsUseCase");
+const mysqlDishRepository = new MysqlDishRepository_1.MysqlDishRepository();
+const mysqlCategoryRepository = new MysqlCategoryRepository_1.MysqlCategoryRepository();
+const listDishsUseCase = new ListDishsUseCase_1.ListDishsUseCase(mysqlDishRepository, mysqlCategoryRepository);
+exports.listDishsUseCase = listDishsUseCase;
+const listDishsController = new ListDishsController_1.ListDishsController(listDishsUseCase);
+exports.listDishsController = listDishsController;

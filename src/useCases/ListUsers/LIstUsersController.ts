@@ -14,7 +14,7 @@ export class ListUsersController{
             return response.status(200).json(allUsers);
         }catch(error){
             return response.status(500).json({
-                message: 'Erro inesperado ao listar usuários.'
+                message: 'Erro inesperado ao listar pratos.'
             });
         }
     }

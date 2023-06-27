@@ -11,9 +11,13 @@ export class ListDishsUseCase{
         this.categoryRepository = categoryRepository;
     }
     
-    async execute(){
-        const categoryWithDishs = await this.dishRepository.findDishsByCategory()
-        
-        return categoryWithDishs
+    async execute(dishValue: string){
+        if(dishValue){
+            const categoryWithDishs = await this.dishRepository.searchDish(dishValue)
+            return categoryWithDishs; 
+        }else{
+            const categoryWithDishs = await this.dishRepository.findDishsByCategory()
+            return categoryWithDishs
+        }
     }
 }

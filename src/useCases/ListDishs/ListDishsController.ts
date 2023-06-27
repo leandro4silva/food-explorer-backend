@@ -9,8 +9,16 @@ export class ListDishsController{
     }
 
     async handle(request: Request, response: Response): Promise <Response>{
-        const listDishs = await this.listDishsUseCase.execute();
+        const {dish} = request.query;
 
-        return response.status(200).json(listDishs)
+        try{
+            const listDishs = await this.listDishsUseCase.execute(String(dish));
+            return response.status(200).json(listDishs)
+        }catch(error){
+            return response.status(500).json({
+                message: 'Erro inesperado ao listar pratos.'
+            });
+        }
+
     }
 }

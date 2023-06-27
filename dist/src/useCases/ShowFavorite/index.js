@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.showFavoriteController = exports.showFavoriteUseCase = void 0;
+const MysqlFavoritesRepository_1 = require("../../repositories/implementations/MysqlFavoritesRepository");
+const ShowFavoriteUseCase_1 = require("./ShowFavoriteUseCase");
+const ShowFavoriteController_1 = require("./ShowFavoriteController");
+const mysqlFavoritesRepository = new MysqlFavoritesRepository_1.MysqlFavoritesRepository();
+const showFavoriteUseCase = new ShowFavoriteUseCase_1.ShowFavoriteUseCase(mysqlFavoritesRepository);
+exports.showFavoriteUseCase = showFavoriteUseCase;
+const showFavoriteController = new ShowFavoriteController_1.ShowFavoriteController(showFavoriteUseCase);
+exports.showFavoriteController = showFavoriteController;
