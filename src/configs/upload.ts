@@ -2,7 +2,7 @@ import path from 'path';
 import crypto from 'crypto';
 import multer from 'multer';
 
-const TMP_FOLDER = path.resolve(__dirname, '..', '..', 'tmp')
+const TMP_FOLDER = path.resolve(__dirname, '..', '..', '..', 'tmp')
 const UPLOAD_FOLDER = path.resolve(TMP_FOLDER, 'uploads')
 
 const MULTER = {

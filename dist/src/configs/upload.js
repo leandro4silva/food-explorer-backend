@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 const crypto_1 = __importDefault(require("crypto"));
 const multer_1 = __importDefault(require("multer"));
-const TMP_FOLDER = path_1.default.resolve(__dirname, '..', '..', 'tmp');
+const TMP_FOLDER = path_1.default.resolve(__dirname, '..', '..', '..', 'tmp');
 const UPLOAD_FOLDER = path_1.default.resolve(TMP_FOLDER, 'uploads');
 const MULTER = {
     storage: multer_1.default.diskStorage({
